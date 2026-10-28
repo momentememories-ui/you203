@@ -8,7 +8,6 @@
     <style>
         body {
             margin: 0; padding: 0;
-            /* แก้ไข 1: เปลี่ยนเป็น photo11.jpg และล็อกพื้นหลังแน่นหนาไม่ให้ขยับเด็ดขาด */
             background-image: url('photo11.jpg');
             background-repeat: no-repeat;
             background-position: center center;
@@ -17,23 +16,22 @@
             font-family: 'Prompt', sans-serif;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             height: 100vh; overflow: hidden;
-            touch-action: none; /* ป้องกันการสกรอลล์/ลากหน้าจอ */
+            touch-action: none;
             user-select: none;
-            position: fixed; /* ล็อกตำแหน่ง body ไม่ให้เคลื่อนไหว */
+            position: fixed;
             width: 100vw;
         }
 
-        /* แก้ไข 2: ปรับแต่งให้สติ๊กเกอร์/อิโมจิบินกระจาย ไม่กระจุกตรงกลาง และขยับตลอดตั้งแต่เริ่ม */
         .butterfly {
             position: absolute; width: 20px; height: 20px;
             pointer-events: none; z-index: 1; font-size: 20px;
-            animation: flying 14s linear infinite;
+            animation: flying 8s linear infinite;
         }
         @keyframes flying {
-            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            0% { transform: translate(0, 100vh) rotate(0deg); opacity: 0; }
             10% { opacity: 0.8; }
             90% { opacity: 0.8; }
-            100% { transform: translate(var(--x-end), -110vh) rotate(360deg); opacity: 0; }
+            100% { transform: translate(var(--x-end), -10vh) rotate(360deg); opacity: 0; }
         }
 
         #status-text { 
@@ -55,7 +53,6 @@
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* แก้ไข 3: อนิเมชันสั่นช่อดอกไม้ดึงดูดสายตา */
         @keyframes bouquetWobble {
             0% { transform: scale(1.15) rotate(0deg); }
             25% { transform: scale(1.18) rotate(-4deg); }
@@ -143,7 +140,6 @@
             transform-origin: center center;
         }
 
-        /* แก้ไข 4: เพิ่มปุ่มปิด (X) สำหรับการดูรูปภาพและจดหมาย */
         .close-btn {
             position: absolute;
             top: -15px;
@@ -163,15 +159,15 @@
             z-index: 10;
         }
 
-        /* แก้ไข 5: อิโมจิตอนกดดูรูปหรือข้อความ ปรับให้ลอยขึ้นอย่างช้าๆ นุ่มนวล (6 วินาที) */
+        /* ปรับให้อิโมจิลอยไวขึ้น (เหลือ 3 วินาที) */
         .pop-emoji {
             position: fixed; pointer-events: none; z-index: 350; font-size: 24px;
-            animation: floatUpEmoji 6s linear forwards; opacity: 0;
+            animation: floatUpEmoji 3s linear forwards; opacity: 0;
         }
         @keyframes floatUpEmoji {
             0% { transform: translateY(100vh) translateX(0) scale(0.6); opacity: 0; }
-            15% { opacity: 0.8; }
-            85% { opacity: 0.8; }
+            15% { opacity: 0.9; }
+            85% { opacity: 0.9; }
             100% { transform: translateY(-15vh) translateX(var(--x-move)) scale(1.1); opacity: 0; }
         }
     </style>
@@ -219,7 +215,6 @@
             }, { once: true });
         });
 
-        /* แก้ไข: สร้างผีเสื้อ/อิโมจิลอยสุ่มทั่วหน้าจอ ไม่ให้รวบกระจุกกลางหน้าจอ และเริ่มลอยทันที */
         function createButterflies() {
             const emojis = ['💗', '🌸', '🤍'];
             for(let i=0; i<16; i++) {
@@ -227,9 +222,8 @@
                 b.className = 'butterfly';
                 b.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
                 b.style.left = (Math.random() * 90) + 'vw';
-                b.style.top = (Math.random() * 100) + 'vh';
-                b.style.setProperty('--x-end', ((Math.random() - 0.5) * 200) + 'px');
-                b.style.animationDelay = (Math.random() * 8) + 's';
+                b.style.setProperty('--x-end', ((Math.random() - 0.5) * 150) + 'px');
+                b.style.animationDelay = (Math.random() * 7) + 's';
                 document.body.appendChild(b);
             }
         }
@@ -240,16 +234,7 @@
         let isBouquetStage = false;
         
         const captions = [
-            "", 
-            "", 
-            "", 
-            "", 
-            "", 
-            "", 
-            "", 
-            "", 
-            "", 
-            ""
+            "", "", "", "", "", "", "", "", "", ""
         ];
 
         const statusText = document.getElementById('status-text');
@@ -309,7 +294,6 @@
                 plantImg.src = 'bouquet.png'; 
                 
                 setTimeout(() => {
-                    /* แก้ไข: สั่นช่อดอกไม้ดึงดูดสายตา */
                     plantImg.classList.add('wobble-active');
                 }, 50);
 
@@ -322,7 +306,6 @@
                     plantImg.style.cursor = 'pointer';
                     plantImg.onclick = () => {
                         bgMusic.play().catch(e => console.log("Music play blocked"));
-                        /* แก้ไข: หยุดสั่นเมื่อกดช่อดอกไม้ */
                         plantImg.classList.remove('wobble-active');
                         plantImg.style.transform = "scale(1.15) rotate(0deg)";
                         explode();
@@ -361,8 +344,6 @@
                 const jitterY = (Math.random() - 0.5) * 15;
                 const finalX = pos.x + jitterX;
                 const finalY = pos.y + jitterY;
-                
-                /* แก้ไข: บังคับค่าสุ่มเอียงระหว่าง -18 ถึง +18 องศา ไม่ให้เรียงเป็นระเบียบ */
                 const rotate = (Math.random() - 0.5) * 36;
 
                 setTimeout(() => {
@@ -403,11 +384,11 @@
                 el.style.left = (Math.random() * 80 + 10) + 'vw';
                 el.style.setProperty('--x-move', ((Math.random() - 0.5) * 120) + 'px');
                 container.appendChild(el);
-                setTimeout(() => el.remove(), 6000);
+                setTimeout(() => el.remove(), 3000);
             }
             
-            for(let i=0; i<5; i++) setTimeout(spawn, Math.random() * 600);
-            emojiInterval = setInterval(spawn, 800);
+            for(let i=0; i<4; i++) setTimeout(spawn, Math.random() * 400);
+            emojiInterval = setInterval(spawn, 500);
         }
 
         function stopEmojiBurst() {
