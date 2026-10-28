@@ -25,10 +25,10 @@
         .butterfly {
             position: absolute; width: 20px; height: 20px;
             pointer-events: none; z-index: 1; font-size: 20px;
-            animation: flying 8s linear infinite;
+            animation: flying 7s linear infinite;
         }
         @keyframes flying {
-            0% { transform: translate(0, 100vh) rotate(0deg); opacity: 0; }
+            0% { transform: translate(var(--x-start), 105vh) rotate(0deg); opacity: 0; }
             10% { opacity: 0.8; }
             90% { opacity: 0.8; }
             100% { transform: translate(var(--x-end), -10vh) rotate(360deg); opacity: 0; }
@@ -159,10 +159,10 @@
             z-index: 10;
         }
 
-        /* ปรับให้อิโมจิลอยไวขึ้น (เหลือ 3 วินาที) */
+        /* ปรับกลับมาเป็น 6 วินาทีตามต้องการ */
         .pop-emoji {
             position: fixed; pointer-events: none; z-index: 350; font-size: 24px;
-            animation: floatUpEmoji 3s linear forwards; opacity: 0;
+            animation: floatUpEmoji 6s linear forwards; opacity: 0;
         }
         @keyframes floatUpEmoji {
             0% { transform: translateY(100vh) translateX(0) scale(0.6); opacity: 0; }
@@ -222,7 +222,8 @@
                 b.className = 'butterfly';
                 b.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
                 b.style.left = (Math.random() * 90) + 'vw';
-                b.style.setProperty('--x-end', ((Math.random() - 0.5) * 150) + 'px');
+                b.style.setProperty('--x-start', ((Math.random() - 0.5) * 50) + 'px');
+                b.style.setProperty('--x-end', ((Math.random() - 0.5) * 200) + 'px');
                 b.style.animationDelay = (Math.random() * 7) + 's';
                 document.body.appendChild(b);
             }
@@ -384,11 +385,11 @@
                 el.style.left = (Math.random() * 80 + 10) + 'vw';
                 el.style.setProperty('--x-move', ((Math.random() - 0.5) * 120) + 'px');
                 container.appendChild(el);
-                setTimeout(() => el.remove(), 3000);
+                setTimeout(() => el.remove(), 6000);
             }
             
             for(let i=0; i<4; i++) setTimeout(spawn, Math.random() * 400);
-            emojiInterval = setInterval(spawn, 500);
+            emojiInterval = setInterval(spawn, 800);
         }
 
         function stopEmojiBurst() {
